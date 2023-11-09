@@ -34,16 +34,14 @@ public void iniciarRobo() throws InterruptedException {
   driver.get("http://awbw.amarriner.com");
 
   login(driver);
-
   Thread.sleep(time);
-
   conseguirDatos(driver);
-
   Thread.sleep(time);
-
   organizarDatos();
-
-
+  Thread.sleep(time);
+  datosMap(driver);
+  Thread.sleep(time);
+  datosPlayer(driver);
   driver.quit();
 }
   public void login(WebDriver driver){
@@ -111,15 +109,60 @@ public void iniciarRobo() throws InterruptedException {
 
   public void datosMap(WebDriver driver){
 
-    for (String link : hrefGames){
+    for (String link : hrefMap){
       driver.get(link);
       String name;
       String creator;
-      int maxPlayers;
+      String maxPlayers;
       String size;
 
+      WebElement element = driver.findElement(By.className("bordertitle"));
+      name = element.getText();
 
+      WebElement element1 = driver.findElement(By.className("game-header-body"));
+      String cadenaEntera = element1.getText();
+      List<String> a = List.of(cadenaEntera.split(" "));
+      maxPlayers = a.get(8);
+      size = a.get(11);
+
+      WebElement element2 = driver.findElement(By.xpath("/html/body/div[3]/section/div[2]/div[1]/div[2]/a"));
+
+      creator = element2.getText();
+
+      System.out.println(name);
+      System.out.println(creator);
+      System.out.println(maxPlayers);
+      System.out.println(size);
+
+      Map map = new Map(name, creator,maxPlayers,size);
     }
+
+  }
+
+  public void datosPlayer(WebDriver driver){
+
+  for(String link : hrefPlayer){
+    driver.get(link);
+    String pname;
+    String lastActivity;
+    String or;
+    String wld;
+    String cWR;
+
+    WebElement element = driver.findElement(By.xpath("/html/body/div[3]/section/div[2]/table[1]/tbody/tr/td[1]/table/tbody/tr[2]/td"));
+    String cadenaEntera = element.getText();
+    List<String> a = List.of(cadenaEntera.split(" "));
+
+    //a.forEach(System.out::println);
+
+    pname = a.get(1);
+    lastActivity = a.get(4);
+    or = a.get(7);
+
+    System.out.println(pname);
+    System.out.println(lastActivity);
+    System.out.println(or);
+  }
 
   }
 
