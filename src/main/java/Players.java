@@ -12,4 +12,8 @@ public class Players {
         this.wld = wld;
         this.commanderWR = commanderWR;
     }
+
+    public String getPlayerName() {
+        return playerName;
+    }
 }

@@ -5,23 +5,25 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class MainScrapp {
   int time = 2500;
 
   ArrayList<Games> games = new ArrayList<>();
-  ArrayList<Map> Map = new ArrayList<>();
-  ArrayList<Players> Players = new ArrayList<>();
+  ArrayList<Map> map = new ArrayList<>();
+  ArrayList<Players> player = new ArrayList<>();
+  ArrayList<String> comm = new ArrayList<>();
 
   ArrayList<String> allHref = new ArrayList<>();
 
   ArrayList<String> hrefGames = new ArrayList<>();
   ArrayList<String> hrefMap = new ArrayList<>();
   ArrayList<String> hrefPlayer = new ArrayList<>();
+  ArrayList<String> hrefComm = new ArrayList<>();
 
-public void iniciarRobo() throws InterruptedException {
+
+  public void iniciarRobo() throws InterruptedException {
   System.out.println(System.getenv("PATH"));
   System.out.println(System.getenv("HOME"));
 
@@ -134,7 +136,7 @@ public void iniciarRobo() throws InterruptedException {
       System.out.println(maxPlayers);
       System.out.println(size);
 
-      Map map = new Map(name, creator,maxPlayers,size);
+      map.add(new Map(name, creator,maxPlayers,size));
     }
 
   }
@@ -156,14 +158,49 @@ public void iniciarRobo() throws InterruptedException {
     //a.forEach(System.out::println);
 
     pname = a.get(1);
-    lastActivity = a.get(4);
-    or = a.get(7);
+    //for (Players players : player) {
+    /*if (players.getPlayerName().equals(pname)){
 
-    System.out.println(pname);
-    System.out.println(lastActivity);
-    System.out.println(or);
+    } else {*/
+      lastActivity = a.get(4);
+      or = a.get(7);
+      wld = a.get(13)+a.get(14)+a.get(15)+a.get(16)+a.get(17);
+
+      System.out.println(pname);
+      System.out.println(lastActivity);
+      System.out.println(or);
+      System.out.println(wld);
+      WebElement element1 = driver.findElement(By.xpath("/html/body/div[3]/section/div[2]/table[1]/tbody/tr/td[2]/table[1]/tbody/tr[2]/td"));
+
+      List<WebElement> elementosA = element1.findElements(By.tagName("a"));
+      if (hrefComm.size() < 1) {
+
+        for (WebElement link2 : elementosA) {
+          String href = link2.getAttribute("href");
+          hrefComm.add(href);
+        }
+        for (String href : hrefComm) {
+          List<String> b = List.of(href.split("#"));
+          System.out.println(b.get(1));
+          comm.add(b.get(1));
+        }
+      }
+      Collections.sort(comm);
+
+      String cadenaEntera2 = element1.getText();
+      List<String> b = List.of(cadenaEntera.split(" "));
+
+    for (String comm : comm){
+
+    }
+
+
+
+    }
+
+    }
   }
 
-  }
+  //}
 
-}
+//}
