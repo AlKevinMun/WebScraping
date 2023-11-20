@@ -1,11 +1,11 @@
 import java.util.ArrayList;
 
-public class Games {
+public class Game {
     private String gameName;
     private Map map;
-    private ArrayList<Players> players;
+    private ArrayList<Player> players;
 
-    public Games(String gameName, Map map, ArrayList<Players> players) {
+    public Game(String gameName, Map map, ArrayList<Player> players) {
         this.gameName = gameName;
         this.map = map;
         this.players = players;
