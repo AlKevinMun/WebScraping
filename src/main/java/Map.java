@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Map {
     private String name;
     private String creator;
@@ -20,4 +22,17 @@ public class Map {
                 ", size='" + size + '\'' +
                 '}';
     }
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Map map = (Map) o;
+        return Objects.equals(name, map.name);
+    }
+
 }

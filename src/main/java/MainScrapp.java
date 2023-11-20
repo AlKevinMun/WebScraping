@@ -22,7 +22,10 @@ public class MainScrapp {
   ArrayList<String> hrefPlayer = new ArrayList<>();
   ArrayList<String> hrefComm = new ArrayList<>();
 
-
+  /**
+   * Este es el código principal para todo lo que viene siendo el WebScrapping.
+   * @throws InterruptedException Este throws es obligatorio debido a que hacemos uso del Thread Sleep
+   */
   public void iniciarRobo() throws InterruptedException {
     System.out.println(System.getenv("PATH"));
     System.out.println(System.getenv("HOME"));
@@ -46,10 +49,13 @@ public class MainScrapp {
     datosPlayer(driver);
     Thread.sleep(time);
     datosGames(driver);
-
     driver.quit();
   }
 
+  /**
+   * El siguiente código encuentra el botón para hacer login en la página web, lo clica e inserta los datos para hacer iniciar session. En este caso se utiliza mi cuenta, pero si se quiere utilizar otra solo se debe cambiar la array llamada "user".
+   * @param driver Es básicamente el elemento del navegador.
+   */
   public void login(WebDriver driver) {
     WebElement LoginEnter = driver.findElement(By.id("login-box-button"));
     LoginEnter.click();
@@ -67,6 +73,11 @@ public class MainScrapp {
     LoginBoton.click();
   }
 
+  /**
+   * El siguiente método entra en el perfil de la cuenta a la que se ha iniciado sesión, y almacena todos los elementos "a" que se encuentren en la caja de "Current Games".
+   * @param driver Es básicamente el elemento del navegador.
+   * @throws InterruptedException Este throws se encuentra aquí por el uso del Thread sleep.
+   */
   public void conseguirDatos(WebDriver driver) throws InterruptedException {
     WebElement Profile = driver.findElement(By.id("profile-menu"));
     Profile.click();
@@ -89,6 +100,9 @@ public class MainScrapp {
     }
   }
 
+  /**
+   * Sirve para organizar de manera ordenada todos los links obtenidos del método "conseguirDatos".
+   */
   public void organizarDatos() {
     int t = 0;
 
@@ -117,7 +131,7 @@ public class MainScrapp {
       driver.get(link);
       String name;
       String mapName;
-      Map map;
+      Map map = null;
       List<Player> playerList = new ArrayList<>();
       List<String> listNamePlayers = new ArrayList<>();
 
@@ -138,6 +152,19 @@ public class MainScrapp {
       System.out.println(mapName);
       listNamePlayers.forEach(System.out::println);
 
+      for(Map map2 : maps){
+        if(map2.getName().equals(mapName)){
+          map = map2;
+        }
+      }
+
+      for(String player1 : listNamePlayers){
+        for (Player player2 : players){
+          if(player1.contains(player2.getPlayerName())) playerList.add(player2);
+        }
+      }
+
+      games.add(new Game(name, map, playerList));
 
     }
 
@@ -176,7 +203,7 @@ public class MainScrapp {
   }
 
   /**
-   * Que hace el metodo
+   * Que hace el método
    *
    * @param driver explicar que es el driver
    */
@@ -184,7 +211,7 @@ public class MainScrapp {
     System.out.println("Entrando a datos player");
     for (String link : hrefPlayer) {
       driver.get(link);
-      System.out.println("moviendose a " + link);
+      System.out.println("moviéndose a " + link);
       String pname;
       String lastActivity;
       String or;
@@ -270,9 +297,9 @@ public class MainScrapp {
   }
 
   /**
-   * Se le propociona la variable que almacena el nombre, y mediante el uso de un Regex se almacena unicamente el nombre sin ningun dato o espacio extra.
+   * Se le proporciona la variable que almacena el nombre, y mediante el uso de un Regex se almacena únicamente el nombre sin ningún dato o espacio extra.
    * @param string En este caso se le debe dar el nombre del jugador.
-   * @return
+   * @return Devuelve el nombre del jugador en un mejor formato.
    */
   public String transformarNombrePlayer(String string) {
     final String regex = "([\\w\\d]+)\\n";
