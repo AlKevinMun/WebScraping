@@ -4,5 +4,7 @@ public class main {
         MainScrapp mainScrapp = new MainScrapp();
 
         mainScrapp.iniciarRobo();
+        mainScrapp.guardarCSV();
+        mainScrapp.guardarXML();
     }
 }

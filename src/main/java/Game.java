@@ -1,6 +1,10 @@
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
-
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Game {
     private String gameName;
     private Map map;
@@ -12,6 +16,8 @@ public class Game {
         this.players = players;
     }
 
+    public Game() {}
+
     @Override
     public String toString() {
         return "Game{" +
@@ -19,5 +25,17 @@ public class Game {
                 ", map=" + map +
                 ", players=" + players +
                 '}';
+    }
+
+    public String getGameName() {
+        return gameName;
+    }
+
+    public Map getMap() {
+        return map;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
     }
 }

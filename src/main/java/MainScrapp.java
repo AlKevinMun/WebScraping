@@ -1,9 +1,20 @@
+import com.opencsv.CSVWriter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,7 +47,7 @@ public class MainScrapp {
     options.setBinary("/home/wavi/firefox/firefox");
 
     WebDriver driver = new FirefoxDriver(options);
-    driver.get("http://awbw.amarriner.com");
+    driver.get("http://awbw.amarriner.com"); // En esta linea se debe poner la pagina en la que se quiere hacer el scrappeo de información. En esta aplicacion es AWBW.
 
     login(driver);
     Thread.sleep(time);
@@ -51,6 +62,127 @@ public class MainScrapp {
     datosGames(driver);
     driver.quit();
   }
+
+
+  /**
+   * Este método guarda los datos de una clase a un fichero CSV. Dentro de la clase se debe poner la ruta del fichero, junto a la clase de la que guardar la información.
+   */
+  public void guardarCSV(){
+    // En la siguiente variable es necesario poner la ruta en la que deseas guardar el fichero.
+    String csvFilePath="src/main/games.csv";
+
+    try (CSVWriter writer = new CSVWriter(new FileWriter(csvFilePath))) {
+      // Escribe las líneas de datos al archivo CSV
+      for (Game game : games) {
+        String[] data = {game.getGameName(),String.valueOf(game.getMap()),String.valueOf(game.getPlayers())};
+        writer.writeNext(data);
+      }
+
+      System.out.println("Datos guardados correctamente en el archivo CSV.");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * El siguiente método guarda los datos de una clase en concreto a un fichero XML, y lo estructura con la jerarquía en concreto de dicha clase. La ruta del fichero se declara dentro del mismo método.
+   */
+  public void guardarXML(){
+    // En la siguiente variable es necesario poner la ruta en la que deseas guardar el fichero.
+    String xmlFilePath="src/main/games.xml";
+    try {
+      DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+      DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+      Document document = dBuilder.newDocument();
+
+
+      //La siguiente línea es para declarar cuál es el nodo raíz del documento XML
+
+      Node rootNode = document.createElement("games");
+      document.appendChild(rootNode);
+
+      //El siguiente for es para que cree un nodo por cada game, lo mismo para cualquier bucle que se vea de este tipo
+
+      for(Game game: games){
+        Node gameNode = document.createElement("game");
+        rootNode.appendChild(gameNode);
+
+        Node gameName = document.createElement("name");
+        gameName.appendChild(document.createTextNode(game.getGameName()));
+        gameNode.appendChild(gameName);
+
+
+        Node mapNode = document.createElement("map");
+        gameNode.appendChild(mapNode);
+
+        Node mapName = document.createElement("name");
+        mapName.appendChild(document.createTextNode(game.getMap().getName()));
+        mapNode.appendChild(mapName);
+
+        Node mapCreator = document.createElement("creator");
+        mapCreator.appendChild(document.createTextNode(game.getMap().getCreator()));
+        mapNode.appendChild(mapCreator);
+
+        Node mapMaxPlayers = document.createElement("maxPlayers");
+        mapMaxPlayers.appendChild(document.createTextNode(game.getMap().getMaxPlayers()));
+        mapNode.appendChild(mapMaxPlayers);
+
+        Node mapSize = document.createElement("size");
+        mapSize.appendChild(document.createTextNode(game.getMap().getSize()));
+        mapNode.appendChild(mapSize);
+
+        for(Player player : game.getPlayers()){
+          Node playerNode = document.createElement("player");
+          gameNode.appendChild(playerNode);
+
+          Node playerName = document.createElement("name");
+          playerName.appendChild(document.createTextNode(player.getPlayerName()));
+          playerNode.appendChild(playerName);
+
+          Node playerLastActivity = document.createElement("lastActivity");
+          playerLastActivity.appendChild(document.createTextNode(player.getLastActivity()));
+          playerNode.appendChild(playerLastActivity);
+
+          Node playerOfficialRating = document.createElement("officialRating");
+          playerOfficialRating.appendChild(document.createTextNode(player.getOfficialRating()));
+          playerNode.appendChild(playerOfficialRating);
+
+          Node playerWLD = document.createElement("wld");
+          playerWLD.appendChild(document.createTextNode(player.getWld()));
+          playerNode.appendChild(playerWLD);
+
+          Node commNode = document.createElement("comm");
+          playerNode.appendChild(commNode);
+          for(String string : player.getCommanderWR()){
+
+            List<String> commSeparate = List.of(string.split(" "));
+
+            Node commName = document.createElement("name");
+            commName.appendChild(document.createTextNode(commSeparate.get(0)));
+            commNode.appendChild(commName);
+
+            Node commWinrate = document.createElement("winrate");
+            commWinrate.appendChild(document.createTextNode(commSeparate.get(2)));
+            commNode.appendChild(commWinrate);
+          }
+        }
+      }
+
+      TransformerFactory transformerFactory = TransformerFactory.newInstance();
+      Transformer transformer = transformerFactory.newTransformer();
+      transformer.setOutputProperty(javax.xml.transform.OutputKeys.INDENT, "yes"); // EL yes es para que tabule de forma automatica
+
+      DOMSource source = new DOMSource(document);
+      StreamResult result = new StreamResult(new File(xmlFilePath));
+      transformer.transform(source, result);
+
+      System.out.println("Datos guardados correctamente en el archivo XML");
+
+    } catch (ParserConfigurationException | TransformerException e) {
+        throw new RuntimeException(e);
+    }
+  }
+
 
   /**
    * El siguiente código encuentra el botón para hacer login en la página web, lo clica e inserta los datos para hacer iniciar session. En este caso se utiliza mi cuenta, pero si se quiere utilizar otra solo se debe cambiar la array llamada "user".
@@ -101,7 +233,7 @@ public class MainScrapp {
   }
 
   /**
-   * Sirve para organizar de manera ordenada todos los links obtenidos del método "conseguirDatos".
+   * Este método sirve para organizar todos los enlaces conseguidos anteriormente, y poder asi funcionar de una manera más ordenada.
    */
   public void organizarDatos() {
     int t = 0;
@@ -122,9 +254,13 @@ public class MainScrapp {
     for (String href : hrefPlayer) {
       System.out.println("Contenido de jugadores: " + href);
     }
-
   }
 
+  /**
+   * En el siguiente método se entra link por link de cada partida, y se va buscando la información necesaria tanto en la página como en las variables de esta clase para crear un game y almacenarlo en una lista de ellos.
+   * @param driver El siguiente parametro hace referencia a la página a la que se quiere acceder.
+   * @throws InterruptedException
+   */
   public void datosGames(WebDriver driver) throws InterruptedException {
 
     for (String link : hrefGames) {
@@ -165,11 +301,13 @@ public class MainScrapp {
       }
 
       games.add(new Game(name, map, playerList));
-
     }
-
   }
 
+  /**
+   * En el siguiente método se entra link por link de cada mapa, y se va buscando la información necesaria en la página para crear un map y almacenarlo en una lista de ellos.
+   * @param driver El siguiente parametro hace referencia a la página a la que se quiere acceder.
+   */
   public void datosMap(WebDriver driver) {
 
     for (String link : hrefMap) {
@@ -203,9 +341,8 @@ public class MainScrapp {
   }
 
   /**
-   * Que hace el método
-   *
-   * @param driver explicar que es el driver
+   * En el siguiente método se entra link por link de cada uno de los jugadores, y se va buscando la información necesaria en la pagina para crear correctamente un player y almacenarlo en una lista.
+   * @param driver El siguiente parametro hace referencia a la página a la que se quiere acceder.
    */
   public void datosPlayer(WebDriver driver) {
     System.out.println("Entrando a datos player");

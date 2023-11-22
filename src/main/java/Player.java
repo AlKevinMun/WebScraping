@@ -1,6 +1,10 @@
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.Objects;
-
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Player {
     private String playerName;
     private String lastActivity;
@@ -16,8 +20,26 @@ public class Player {
         this.commanderWR = commanderWR;
     }
 
+    public Player() {}
+
     public String getPlayerName() {
         return playerName;
+    }
+
+    public String getLastActivity() {
+        return lastActivity;
+    }
+
+    public String getOfficialRating() {
+        return officialRating;
+    }
+
+    public String getWld() {
+        return wld;
+    }
+
+    public ArrayList<String> getCommanderWR() {
+        return commanderWR;
     }
 
     @Override

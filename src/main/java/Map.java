@@ -1,5 +1,9 @@
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Objects;
-
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Map {
     private String name;
     private String creator;
@@ -13,6 +17,9 @@ public class Map {
         this.size = size;
     }
 
+    public Map() {}
+
+
     @Override
     public String toString() {
         return "Map{" +
@@ -25,6 +32,18 @@ public class Map {
 
     public String getName() {
         return name;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public String getMaxPlayers() {
+        return maxPlayers;
+    }
+
+    public String getSize() {
+        return size;
     }
 
     @Override
