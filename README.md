@@ -12,4 +12,4 @@ Por ello he dejado creados unos archivos tanto CSV como XML llamados "prueba." y
 
 Si aun así se quiere ver como obtiene los datos, se me puede enviar un correo para crear partidas de prueba.
 
-![Alt text] (DIAGRAM.png)
+![](DIAGRAM.png)
