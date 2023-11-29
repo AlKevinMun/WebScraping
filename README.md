@@ -16,4 +16,6 @@ Por ello he dejado creados unos archivos tanto CSV como XML llamados "prueba." Y
 
 Si aun así se quiere ver como obtiene los datos, se me puede enviar un correo para crear partidas de prueba.
 
-![](DIAGRAM.png)
+### **Aquí dejo adjuntada una imagen indicando el diagrama de clases de este proyecto:**
+
+![](DIAGRAM.png) 
