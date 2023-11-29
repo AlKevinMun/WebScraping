@@ -19,7 +19,13 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Esta clase es el equivalente a la clase controlador
+ */
 public class MainScrapp {
+  /**
+   * Contiene la cantidad de milisegundos para establecer a todos los sleeps / waits que se utilizan a lo largo de todo el fichero.
+   */
   int time = 2500;
 
   ArrayList<Game> games = new ArrayList<>();
@@ -186,7 +192,7 @@ public class MainScrapp {
 
   /**
    * El siguiente código encuentra el botón para hacer login en la página web, lo clica e inserta los datos para hacer iniciar session. En este caso se utiliza mi cuenta, pero si se quiere utilizar otra solo se debe cambiar la array llamada "user".
-   * @param driver Es básicamente el elemento del navegador.
+   * @param driver El siguiente parametro hace referencia a la página a la que se quiere acceder.
    */
   public void login(WebDriver driver) {
     WebElement LoginEnter = driver.findElement(By.id("login-box-button"));
@@ -207,7 +213,7 @@ public class MainScrapp {
 
   /**
    * El siguiente método entra en el perfil de la cuenta a la que se ha iniciado sesión, y almacena todos los elementos "a" que se encuentren en la caja de "Current Games".
-   * @param driver Es básicamente el elemento del navegador.
+   * @param driver El siguiente parametro hace referencia a la página a la que se quiere acceder.
    * @throws InterruptedException Este throws se encuentra aquí por el uso del Thread sleep.
    */
   public void conseguirDatos(WebDriver driver) throws InterruptedException {

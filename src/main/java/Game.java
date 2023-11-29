@@ -5,9 +5,21 @@ import java.util.ArrayList;
 import java.util.List;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
+/**
+ * La clase almacena los datos de cada partida
+ */
 public class Game {
+    /**
+     * Contiene el nombre de la partida
+     */
     private String gameName;
+    /**
+     * Contiene el objeto mapa de esta partida
+     */
     private Map map;
+    /**
+     * Contiene una lista con todos los jugadores que participan en esta partida
+     */
     private List<Player> players;
 
     public Game(String gameName, Map map, List<Player> players) {
