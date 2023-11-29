@@ -1,13 +1,14 @@
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.ArrayList;
+
 import java.util.List;
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
 /**
  * La clase almacena los datos de cada partida
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+
 public class Game {
     /**
      * Contiene el nombre de la partida

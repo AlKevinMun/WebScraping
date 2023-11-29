@@ -2,11 +2,12 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Objects;
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
 /**
  * Esta clase almacena los datos del mapa
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+
 public class Map {
     /**
      * Contiene el nombre del mapa

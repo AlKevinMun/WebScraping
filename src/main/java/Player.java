@@ -3,11 +3,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.Objects;
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
 /**
  * Clase que almacena los datos del jugador
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+
 public class Player {
     /**
      * Contiene el nombre del jugador
