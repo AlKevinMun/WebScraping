@@ -62,7 +62,7 @@ public class Player {
     }
 
     /**
-     * El siguiente metodo es para comparar si cada jugador en cuestion tiene el mismo nombre.
+     * El siguiente método es para comparar si cada jugador en cuestión tiene el mismo nombre.
      * @param o es el objeto a comparar
      * @return Devuelve true o false dependiendo si el nombre del jugador es el mismo
      */
@@ -84,4 +84,7 @@ public class Player {
                 ", commanderWR=" + commanderWR +
                 '}';
     }
+
+
+
 }

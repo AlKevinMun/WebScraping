@@ -53,7 +53,7 @@ public class MainScrapp {
     options.setBinary("/home/wavi/firefox/firefox");
 
     WebDriver driver = new FirefoxDriver(options);
-    driver.get("http://awbw.amarriner.com"); // En esta linea se debe poner la pagina en la que se quiere hacer el scrappeo de información. En esta aplicacion es AWBW.
+    driver.get("http://awbw.amarriner.com"); // En esta línea se debe poner la página en la que se quiere hacer el scrappeo de información. En esta aplicación es AWBW.
 
     login(driver);
     Thread.sleep(time);
@@ -75,8 +75,74 @@ public class MainScrapp {
    */
   public void guardarCSV(){
     // En la siguiente variable es necesario poner la ruta en la que deseas guardar el fichero.
-    String csvFilePath="src/main/games.csv";
+    String csvGame="src/main/game.csv";
+    String csvMap="src/main/map.csv";
+    String csvPlayer="src/main/player.csv";
+    String csvFilePathGames="src/main/games.csv";
+    try {
+      CSVWriter writer1 = new CSVWriter(new FileWriter(csvGame));
+      CSVWriter writer2 = new CSVWriter(new FileWriter(csvMap));
+      CSVWriter writer3 = new CSVWriter(new FileWriter(csvPlayer));
+      CSVWriter writer4 = new CSVWriter(new FileWriter(csvFilePathGames));
+      String[] data1 = {"NAME"};
+      writer1.writeNext(data1);
+      data1 = new String[]{"NAME", "CREATOR", "MAX_PLAYERS", "SIZE"};
+      writer2.writeNext(data1);
+      data1 = new String[]{"NAME", "LAST_ACTIVITY", "OFFICIAL_RATING", "WLD", "COMMANDER_WR"};
+      writer3.writeNext(data1);
+      data1 = new String[]{"GAME_NAME", "MAP_NAME","PLAYER_NAME"};
+      writer4.writeNext(data1);
 
+      for (Game games : this.games) {
+        String[] data = {
+                games.getGameName()
+                };
+        writer1.writeNext(data);
+      }
+      for (Map maps : this.maps){
+        String[] data = new String[] {
+                maps.getName(),
+                maps.getCreator(),
+                maps.getMaxPlayers(),
+                maps.getSize(),
+        };
+        writer2.writeNext(data);
+      }
+      for (Player players : this.players){
+        String[] data = new String[]{
+                players.getPlayerName(),
+                players.getLastActivity(),
+                players.getOfficialRating(),
+                players.getWld(),
+                String.valueOf(players.getCommanderWR())
+        };
+        writer3.writeNext(data);
+      }
+      for (Game games : this.games){
+        String nombreplayers = "";
+        int savedPlayers=1;
+        for (Player player : games.getPlayers()){
+          if (savedPlayers!=games.getPlayers().size())nombreplayers += player.getPlayerName() + ",";
+          else nombreplayers += player.getPlayerName();
+          savedPlayers++;
+        }
+        String[] data = new String[]{
+                games.getGameName(),
+                String.valueOf(games.getMap().getName()),
+                nombreplayers
+        };
+        writer4.writeNext(data);
+      }
+      writer4.close();
+      writer3.close();
+      writer2.close();
+      writer1.close();
+
+      System.out.println("Datos guardados correctamente en el archivo CSV.");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+/*
     try (CSVWriter writer = new CSVWriter(new FileWriter(csvFilePath))) {
       // Escribe las líneas de datos al archivo CSV
       for (Game game : games) {
@@ -84,10 +150,11 @@ public class MainScrapp {
         writer.writeNext(data);
       }
 
-      System.out.println("Datos guardados correctamente en el archivo CSV.");
-    } catch (IOException e) {
+    System.out.println("Datos guardados correctamente en el archivo CSV.");
+  } catch (IOException e) {
       e.printStackTrace();
     }
+ */
   }
 
   /**
@@ -176,7 +243,7 @@ public class MainScrapp {
 
       TransformerFactory transformerFactory = TransformerFactory.newInstance();
       Transformer transformer = transformerFactory.newTransformer();
-      transformer.setOutputProperty(javax.xml.transform.OutputKeys.INDENT, "yes"); // EL yes es para que tabule de forma automatica
+      transformer.setOutputProperty(javax.xml.transform.OutputKeys.INDENT, "yes"); // El yes es para que tabule de forma automática
 
       DOMSource source = new DOMSource(document);
       StreamResult result = new StreamResult(new File(xmlFilePath));
@@ -192,7 +259,7 @@ public class MainScrapp {
 
   /**
    * El siguiente código encuentra el botón para hacer login en la página web, lo clica e inserta los datos para hacer iniciar session. En este caso se utiliza mi cuenta, pero si se quiere utilizar otra solo se debe cambiar la array llamada "user".
-   * @param driver El siguiente parametro hace referencia a la página a la que se quiere acceder.
+   * @param driver El siguiente parámetro hace referencia a la página a la que se quiere acceder.
    */
   public void login(WebDriver driver) {
     WebElement LoginEnter = driver.findElement(By.id("login-box-button"));
@@ -213,7 +280,7 @@ public class MainScrapp {
 
   /**
    * El siguiente método entra en el perfil de la cuenta a la que se ha iniciado sesión, y almacena todos los elementos "a" que se encuentren en la caja de "Current Games".
-   * @param driver El siguiente parametro hace referencia a la página a la que se quiere acceder.
+   * @param driver El siguiente parámetro hace referencia a la página a la que se quiere acceder.
    * @throws InterruptedException Este throws se encuentra aquí por el uso del Thread sleep.
    */
   public void conseguirDatos(WebDriver driver) throws InterruptedException {
@@ -264,7 +331,7 @@ public class MainScrapp {
 
   /**
    * En el siguiente método se entra link por link de cada partida, y se va buscando la información necesaria tanto en la página como en las variables de esta clase para crear un game y almacenarlo en una lista de ellos.
-   * @param driver El siguiente parametro hace referencia a la página a la que se quiere acceder.
+   * @param driver El siguiente parámetro hace referencia a la página a la que se quiere acceder.
    * @throws InterruptedException
    */
   public void datosGames(WebDriver driver) throws InterruptedException {
@@ -312,7 +379,7 @@ public class MainScrapp {
 
   /**
    * En el siguiente método se entra link por link de cada mapa, y se va buscando la información necesaria en la página para crear un map y almacenarlo en una lista de ellos.
-   * @param driver El siguiente parametro hace referencia a la página a la que se quiere acceder.
+   * @param driver El siguiente parámetro hace referencia a la página a la que se quiere acceder.
    */
   public void datosMap(WebDriver driver) {
 
@@ -347,8 +414,8 @@ public class MainScrapp {
   }
 
   /**
-   * En el siguiente método se entra link por link de cada uno de los jugadores, y se va buscando la información necesaria en la pagina para crear correctamente un player y almacenarlo en una lista.
-   * @param driver El siguiente parametro hace referencia a la página a la que se quiere acceder.
+   * En el siguiente método se entra link por link de cada uno de los jugadores, y se va buscando la información necesaria en la página para crear correctamente un player y almacenarlo en una lista.
+   * @param driver El siguiente parámetro hace referencia a la página a la que se quiere acceder.
    */
   public void datosPlayer(WebDriver driver) {
     System.out.println("Entrando a datos player");

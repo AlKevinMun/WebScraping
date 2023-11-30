@@ -18,7 +18,7 @@ public class Map {
      */
     private String creator;
     /**
-     * Contiene los jugadores maximos que permite el mapa
+     * Contiene los jugadores máximos que permite el mapa
      */
     private String maxPlayers;
     /**
